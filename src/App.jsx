@@ -1,19 +1,60 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, Link } from "react-router-dom";
+import "./App.css";
+
+// Import Member 3 Pages
+import HostDashboard from "./pages/host/HostDashboard";
+import ManageAccommodations from "./pages/host/ManageAccommodations";
+import DriverDashboard from "./pages/driver/DriverDashboard";
+import ManageTransports from "./pages/driver/ManageTransports";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-    <div className="text-primary font-sans p-4 bg-gray-100">
-          <h1 className="text-3xl font-bold">Hello Tailwind v4!</h1>
-          <button className="bg-primary text-white p-2 rounded mt-4">Click Me</button>
-        </div>
-    </>
-  )
+    <div className="min-h-screen bg-gray-100 font-sans">
+      {/* Temporary Navigation for Testing */}
+      <nav className="p-4 bg-white shadow-md flex gap-4">
+        <Link to="/" className="text-blue-600 font-bold">
+          Home
+        </Link>
+        <Link
+          to="/host/dashboard"
+          className="text-gray-700 hover:text-blue-500"
+        >
+          Host Dashboard
+        </Link>
+        <Link
+          to="/driver/dashboard"
+          className="text-gray-700 hover:text-blue-500"
+        >
+          Driver Dashboard
+        </Link>
+      </nav>
+
+      <div className="p-4">
+        <Routes>
+          {/* Default Home Page */}
+          <Route
+            path="/"
+            element={
+              <div className="text-center mt-10">
+                <h1 className="text-4xl font-bold text-primary">
+                  Safari Connect
+                </h1>
+                <p className="mt-4 text-gray-600">
+                  Welcome! Select a dashboard above to manage services.
+                </p>
+              </div>
+            }
+          />
+
+          {/* Member 3 Routes */}
+          <Route path="/host/dashboard" element={<HostDashboard />} />
+          <Route path="/host/manage" element={<ManageAccommodations />} />
+          <Route path="/driver/dashboard" element={<DriverDashboard />} />
+          <Route path="/driver/manage" element={<ManageTransports />} />
+        </Routes>
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
