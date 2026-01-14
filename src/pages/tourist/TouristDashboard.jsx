@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { bookingAPI } from '../../api/booking.api';
-import { accommodationAPI } from '../../api/accommodation.api';
-import { transportAPI } from '../../api/transport.api';
+import { accommodationAPI } from '../../api/accommodation.api.js';
+import { transportAPI } from '../../api/transport.api.js';
 import BookingCard from '../../components/booking/BookingCard';
 
 const TouristDashboard = () => {

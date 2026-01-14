@@ -1,3 +1,4 @@
+// src/hooks/useAuth.js
 import { useAuth } from '../context/AuthContext.jsx'
 
 export const useAuthHook = () => {
@@ -25,7 +26,7 @@ export const useAuthHook = () => {
     hasRole,
     hasAnyRole,
     isAuthenticated,
-    
+
     // Helper methods
     isTourist: () => hasRole('tourist'),
     isHost: () => hasRole('host'),

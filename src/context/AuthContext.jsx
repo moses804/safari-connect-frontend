@@ -1,3 +1,4 @@
+// src/context/AuthContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import { authAPI } from '../api/auth.api.js'
 
@@ -15,10 +16,9 @@ export const AuthProvider = ({ children }) => {
     const loadUser = async () => {
       const token = localStorage.getItem('token')
       const storedUser = localStorage.getItem('user')
-      
+
       if (token && storedUser) {
         try {
-          // Verify token with backend
           const verified = await authAPI.verifyToken()
           if (verified) {
             setUser(JSON.parse(storedUser))
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
       }
       setLoading(false)
     }
-    
+
     loadUser()
   }, [])
 
@@ -76,6 +76,8 @@ export const AuthProvider = ({ children }) => {
     authAPI.logout()
     setUser(null)
     setError(null)
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
   }
 
   // Update user profile
@@ -85,14 +87,10 @@ export const AuthProvider = ({ children }) => {
   }
 
   // Check if user has specific role
-  const hasRole = (role) => {
-    return user?.role === role
-  }
+  const hasRole = (role) => user?.role === role
 
   // Check if user has any of the given roles
-  const hasAnyRole = (roles) => {
-    return roles.includes(user?.role)
-  }
+  const hasAnyRole = (roles) => roles.includes(user?.role)
 
   const value = {
     user,
@@ -107,9 +105,5 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: !!user,
   }
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
