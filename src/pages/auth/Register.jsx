@@ -6,21 +6,12 @@ import { useAuthHook } from '../../hooks/useAuth.js'
 import AuthLayout from '../../layouts/AuthLayout.jsx'
 
 const RegisterSchema = Yup.object().shape({
-  username: Yup.string()
-    .required('Username is required')
-    .min(3, 'Username must be at least 3 characters')
-    .max(20, 'Username must be less than 20 characters')
-    .matches(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
   email: Yup.string()
     .email('Invalid email address')
     .required('Email is required'),
   password: Yup.string()
     .required('Password is required')
-    .min(6, 'Password must be at least 6 characters')
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      'Password must contain at least one uppercase letter, one lowercase letter, and one number'
-    ),
+    .min(6, 'Password must be at least 6 characters'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), null], 'Passwords must match')
     .required('Please confirm your password'),
@@ -30,9 +21,6 @@ const RegisterSchema = Yup.object().shape({
   role: Yup.string()
     .required('Please select a role')
     .oneOf(['tourist', 'host', 'driver'], 'Invalid role selected'),
-  phone: Yup.string()
-    .matches(/^[+]?[\d\s-]+$/, 'Invalid phone number')
-    .required('Phone number is required'),
 })
 
 const Register = () => {
@@ -60,13 +48,11 @@ const Register = () => {
     <AuthLayout>
       <Formik
         initialValues={{
-          username: '',
           email: '',
           password: '',
           confirmPassword: '',
           name: '',
           role: '',
-          phone: '',
         }}
         validationSchema={RegisterSchema}
         onSubmit={handleSubmit}
@@ -84,27 +70,6 @@ const Register = () => {
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                  Username *
-                </label>
-                <Field
-                  id="username"
-                  name="username"
-                  type="text"
-                  className={`mt-1 block w-full px-3 py-2 border ${
-                    errors.username && touched.username
-                      ? 'border-red-300'
-                      : 'border-gray-300'
-                  } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                />
-                <ErrorMessage
-                  name="username"
-                  component="div"
-                  className="mt-1 text-sm text-red-600"
-                />
-              </div>
-
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email *
@@ -184,27 +149,6 @@ const Register = () => {
                 />
                 <ErrorMessage
                   name="name"
-                  component="div"
-                  className="mt-1 text-sm text-red-600"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                  Phone Number *
-                </label>
-                <Field
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  className={`mt-1 block w-full px-3 py-2 border ${
-                    errors.phone && touched.phone
-                      ? 'border-red-300'
-                      : 'border-gray-300'
-                  } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                />
-                <ErrorMessage
-                  name="phone"
                   component="div"
                   className="mt-1 text-sm text-red-600"
                 />

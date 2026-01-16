@@ -12,27 +12,46 @@ export const BookingProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   // Fetch bookings on mount
-  useEffect(() => {
-    const fetchBookings = async () => {
-      setLoading(true);
-      try {
-        const data = await bookingAPI.getAll(); // Fetch all bookings
-        setBookings(data);
-      } catch (err) {
-        setError(err.message || "Failed to load bookings");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchBookings = async () => {
+    setLoading(true);
+    try {
+      const [accommodationBookings, transportBookings] = await Promise.all([
+        bookingAPI.getAccommodationBookings(),
+        bookingAPI.getTransportBookings()
+      ]);
+      
+      // Combine both types of bookings
+      const allBookings = [
+        ...(accommodationBookings.data || []),
+        ...(transportBookings.data || [])
+      ];
+      setBookings(allBookings);
+      setError(null);
+    } catch (err) {
+      setError(err.message || "Failed to load bookings");
+      console.error("Booking fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchBookings();
   }, []);
 
-  const addBooking = async (bookingData) => {
+  const addAccommodationBooking = async (bookingData) => {
     try {
-      const newBooking = await bookingAPI.create(bookingData);
-      setBookings((prev) => [...prev, newBooking]);
-      return newBooking;
+      await bookingAPI.createAccommodationBooking(bookingData);
+      await fetchBookings();
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  const addTransportBooking = async (bookingData) => {
+    try {
+      await bookingAPI.createTransportBooking(bookingData);
+      await fetchBookings();
     } catch (err) {
       throw err;
     }
@@ -43,7 +62,9 @@ export const BookingProvider = ({ children }) => {
     loading,
     error,
     setBookings,
-    addBooking,
+    fetchBookings,
+    addAccommodationBooking,
+    addTransportBooking,
   };
 
   return (
