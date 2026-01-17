@@ -1,72 +1,58 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
-import * as Yup from 'yup'
-import { useAuthHook } from '../../hooks/useAuth.js'
-import AuthLayout from '../../layouts/AuthLayout.jsx'
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { useAuthHook } from "../../hooks/useAuth.js";
+import AuthLayout from "../../layouts/AuthLayout.jsx";
 
 const RegisterSchema = Yup.object().shape({
-  username: Yup.string()
-    .required('Username is required')
-    .min(3, 'Username must be at least 3 characters')
-    .max(20, 'Username must be less than 20 characters')
-    .matches(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
-  email: Yup.string()
-    .email('Invalid email address')
-    .required('Email is required'),
-  password: Yup.string()
-    .required('Password is required')
-    .min(6, 'Password must be at least 6 characters')
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      'Password must contain at least one uppercase letter, one lowercase letter, and one number'
-    ),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    .required('Please confirm your password'),
   name: Yup.string()
-    .required('Full name is required')
-    .min(2, 'Name must be at least 2 characters'),
+    .required("Full name is required")
+    .min(2, "Name must be at least 2 characters"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  phone_number: Yup.string()
+    .matches(/^[+]?[\d\s-]+$/, "Invalid phone number")
+    .required("Phone number is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters"),
   role: Yup.string()
-    .required('Please select a role')
-    .oneOf(['tourist', 'host', 'driver'], 'Invalid role selected'),
-  phone: Yup.string()
-    .matches(/^[+]?[\d\s-]+$/, 'Invalid phone number')
-    .required('Phone number is required'),
-})
+    .required("Please select a role")
+    .oneOf(["tourist", "host", "driver"], "Invalid role selected"),
+});
 
 const Register = () => {
-  const { register } = useAuthHook()
-  const navigate = useNavigate()
-  const [serverError, setServerError] = useState('')
+  const { register } = useAuthHook();
+  const navigate = useNavigate();
+  const [serverError, setServerError] = useState("");
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    setServerError('')
+    setServerError("");
     try {
-      await register(values)
+      await register(values);
       // Redirect to appropriate dashboard based on role
-      if (values.role === 'tourist') navigate('/tourist/dashboard')
-      else if (values.role === 'host') navigate('/host/dashboard')
-      else if (values.role === 'driver') navigate('/driver/dashboard')
-      else navigate('/')
+      if (values.role === "tourist") navigate("/tourist/dashboard");
+      else if (values.role === "host") navigate("/host/dashboard");
+      else if (values.role === "driver") navigate("/driver/dashboard");
+      else navigate("/");
     } catch (error) {
-      setServerError(error.message || 'Registration failed. Please try again.')
+      setServerError(error.message || "Registration failed. Please try again.");
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   return (
     <AuthLayout>
       <Formik
         initialValues={{
-          username: '',
-          email: '',
-          password: '',
-          confirmPassword: '',
-          name: '',
-          role: '',
-          phone: '',
+          name: "",
+          email: "",
+          phone_number: "",
+          password: "",
+          role: "",
         }}
         validationSchema={RegisterSchema}
         onSubmit={handleSubmit}
@@ -85,91 +71,10 @@ const Register = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-                  Username *
-                </label>
-                <Field
-                  id="username"
-                  name="username"
-                  type="text"
-                  className={`mt-1 block w-full px-3 py-2 border ${
-                    errors.username && touched.username
-                      ? 'border-red-300'
-                      : 'border-gray-300'
-                  } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                />
-                <ErrorMessage
-                  name="username"
-                  component="div"
-                  className="mt-1 text-sm text-red-600"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Email *
-                </label>
-                <Field
-                  id="email"
-                  name="email"
-                  type="email"
-                  className={`mt-1 block w-full px-3 py-2 border ${
-                    errors.email && touched.email
-                      ? 'border-red-300'
-                      : 'border-gray-300'
-                  } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                />
-                <ErrorMessage
-                  name="email"
-                  component="div"
-                  className="mt-1 text-sm text-red-600"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  Password *
-                </label>
-                <Field
-                  id="password"
-                  name="password"
-                  type="password"
-                  className={`mt-1 block w-full px-3 py-2 border ${
-                    errors.password && touched.password
-                      ? 'border-red-300'
-                      : 'border-gray-300'
-                  } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                />
-                <ErrorMessage
-                  name="password"
-                  component="div"
-                  className="mt-1 text-sm text-red-600"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                  Confirm Password *
-                </label>
-                <Field
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  className={`mt-1 block w-full px-3 py-2 border ${
-                    errors.confirmPassword && touched.confirmPassword
-                      ? 'border-red-300'
-                      : 'border-gray-300'
-                  } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                />
-                <ErrorMessage
-                  name="confirmPassword"
-                  component="div"
-                  className="mt-1 text-sm text-red-600"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Full Name *
                 </label>
                 <Field
@@ -178,8 +83,8 @@ const Register = () => {
                   type="text"
                   className={`mt-1 block w-full px-3 py-2 border ${
                     errors.name && touched.name
-                      ? 'border-red-300'
-                      : 'border-gray-300'
+                      ? "border-red-300"
+                      : "border-gray-300"
                   } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
                 />
                 <ErrorMessage
@@ -190,32 +95,86 @@ const Register = () => {
               </div>
 
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                  Phone Number *
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Email *
                 </label>
                 <Field
-                  id="phone"
-                  name="phone"
-                  type="tel"
+                  id="email"
+                  name="email"
+                  type="email"
                   className={`mt-1 block w-full px-3 py-2 border ${
-                    errors.phone && touched.phone
-                      ? 'border-red-300'
-                      : 'border-gray-300'
+                    errors.email && touched.email
+                      ? "border-red-300"
+                      : "border-gray-300"
                   } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
                 />
                 <ErrorMessage
-                  name="phone"
+                  name="email"
+                  component="div"
+                  className="mt-1 text-sm text-red-600"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="phone_number"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Phone Number *
+                </label>
+                <Field
+                  id="phone_number"
+                  name="phone_number"
+                  type="tel"
+                  className={`mt-1 block w-full px-3 py-2 border ${
+                    errors.phone_number && touched.phone_number
+                      ? "border-red-300"
+                      : "border-gray-300"
+                  } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                />
+                <ErrorMessage
+                  name="phone_number"
+                  component="div"
+                  className="mt-1 text-sm text-red-600"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Password *
+                </label>
+                <Field
+                  id="password"
+                  name="password"
+                  type="password"
+                  className={`mt-1 block w-full px-3 py-2 border ${
+                    errors.password && touched.password
+                      ? "border-red-300"
+                      : "border-gray-300"
+                  } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                />
+                <ErrorMessage
+                  name="password"
                   component="div"
                   className="mt-1 text-sm text-red-600"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="role"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   I want to join as: *
                 </label>
                 <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {['tourist', 'host', 'driver'].map((role) => (
+                  {["tourist", "host", "driver"].map((role) => (
                     <div key={role} className="relative">
                       <Field
                         type="radio"
@@ -228,13 +187,16 @@ const Register = () => {
                         htmlFor={`role-${role}`}
                         className={`cursor-pointer flex items-center justify-center px-4 py-3 border rounded-lg ${
                           values.role === role
-                            ? 'border-blue-500 bg-blue-50'
-                            : 'border-gray-300 hover:bg-gray-50'
+                            ? "border-blue-500 bg-blue-50"
+                            : "border-gray-300 hover:bg-gray-50"
                         }`}
                       >
                         <span className="text-sm font-medium capitalize">
-                          {role === 'tourist' ? 'Traveler' : 
-                           role === 'host' ? 'Accommodation Host' : 'Transport Driver'}
+                          {role === "tourist"
+                            ? "Traveler"
+                            : role === "host"
+                              ? "Accommodation Host"
+                              : "Transport Driver"}
                         </span>
                       </label>
                     </div>
@@ -265,14 +227,14 @@ const Register = () => {
                 disabled={isSubmitting}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? 'Creating account...' : 'Create account'}
+                {isSubmitting ? "Creating account..." : "Create account"}
               </button>
             </div>
           </Form>
         )}
       </Formik>
     </AuthLayout>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

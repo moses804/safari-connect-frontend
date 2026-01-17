@@ -1,4 +1,4 @@
-import AccommodationCard from '../AccommodationCard';
+import AccommodationCard from './AccommodationCard';
 
 const AccommodationList = ({ accommodations }) => {
   return (
