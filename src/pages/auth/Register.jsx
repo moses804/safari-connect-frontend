@@ -32,11 +32,8 @@ const Register = () => {
     setServerError("");
     try {
       await register(values);
-      // Redirect to appropriate dashboard based on role
-      if (values.role === "tourist") navigate("/tourist/dashboard");
-      else if (values.role === "host") navigate("/host/dashboard");
-      else if (values.role === "driver") navigate("/driver/dashboard");
-      else navigate("/");
+      // Registration successful - redirect to login
+      navigate("/login");
     } catch (error) {
       setServerError(error.message || "Registration failed. Please try again.");
     } finally {
