@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuthHook } from "../../hooks/useAuth";
 import { useBooking } from "../../context/BookingContext";
+import { Hotel, Bus, Calendar, CheckCircle, ClipboardList, Lightbulb, Hand } from "lucide-react";
 
 const TouristDashboard = () => {
   const { user } = useAuthHook();
@@ -21,8 +22,8 @@ const TouristDashboard = () => {
   return (
     <div className="p-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">
-          Welcome back, {user?.name}! 👋
+        <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+          Welcome back, {user?.name}! <Hand className="w-8 h-8 text-yellow-500" />
         </h1>
         <p className="text-gray-600 mt-2">Plan your next safari adventure</p>
       </div>
@@ -34,8 +35,8 @@ const TouristDashboard = () => {
           className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition border-2 border-transparent hover:border-blue-500"
         >
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-3xl">
-              🏨
+            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+              <Hotel className="w-8 h-8 text-blue-600" />
             </div>
             <div>
               <h3 className="text-xl font-bold text-gray-900">
@@ -50,8 +51,8 @@ const TouristDashboard = () => {
           className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition border-2 border-transparent hover:border-green-500"
         >
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl">
-              🚌
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+              <Bus className="w-8 h-8 text-green-600" />
             </div>
             <div>
               <h3 className="text-xl font-bold text-gray-900">
@@ -69,8 +70,8 @@ const TouristDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-2xl">
-              📅
+            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+              <Calendar className="w-6 h-6 text-blue-600" />
             </div>
             <div>
               <p className="text-gray-600 text-sm">Total Bookings</p>
@@ -82,8 +83,8 @@ const TouristDashboard = () => {
         </div>
         <div className="bg-white rounded-lg shadow-lg p-6">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-2xl">
-              ✓
+            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+              <CheckCircle className="w-6 h-6 text-green-600" />
             </div>
             <div>
               <p className="text-gray-600 text-sm">Upcoming Trips</p>
@@ -95,8 +96,8 @@ const TouristDashboard = () => {
         </div>
         <div className="bg-white rounded-lg shadow-lg p-6">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-2xl">
-              📋
+            <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+              <ClipboardList className="w-6 h-6 text-yellow-600" />
             </div>
             <div>
               <p className="text-gray-600 text-sm">Completed</p>
@@ -124,8 +125,12 @@ const TouristDashboard = () => {
             {upcomingBookings.slice(0, 2).map((booking) => (
               <div key={booking.id} className="border rounded-lg p-4">
                 <div className="flex items-center gap-3">
-                  <div className="text-2xl">
-                    {booking.accommodation_id ? "🏨" : "🚌"}
+                  <div>
+                    {booking.accommodation_id ? (
+                      <Hotel className="w-6 h-6 text-blue-600" />
+                    ) : (
+                      <Bus className="w-6 h-6 text-green-600" />
+                    )}
                   </div>
                   <div>
                     <p className="font-semibold">
@@ -150,8 +155,8 @@ const TouristDashboard = () => {
 
       {/* Tips Section */}
       <div className="bg-yellow-50 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-yellow-900 mb-3">
-          💡 Safari Tips
+        <h3 className="text-lg font-semibold text-yellow-900 mb-3 flex items-center gap-2">
+          <Lightbulb className="w-5 h-5" /> Safari Tips
         </h3>
         <ul className="space-y-2 text-yellow-800">
           <li>• Book accommodations in advance for the best selection</li>

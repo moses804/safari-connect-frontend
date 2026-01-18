@@ -3,6 +3,7 @@ import { useAuthHook } from "../../hooks/useAuth";
 import { transportAPI } from "../../api/transport.api";
 import { bookingAPI } from "../../api/booking.api";
 import TransportForm from "../../components/transport/TransportForm";
+import { Loader2, Bus, Users } from "lucide-react";
 
 const ManageTransports = () => {
   const { user } = useAuthHook();
@@ -55,7 +56,7 @@ const ManageTransports = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-4xl animate-spin">⏳</div>
+        <Loader2 className="w-12 h-12 animate-spin text-green-600" />
       </div>
     );
   }
@@ -168,7 +169,7 @@ const ManageTransports = () => {
         <>
           {transports.length === 0 ? (
             <div className="bg-white rounded-lg shadow-lg p-12 text-center">
-              <div className="text-6xl mb-4">🚌</div>
+              <Bus className="w-16 h-16 mx-auto mb-4 text-gray-400" />
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 No Transport Services Yet
               </h2>
@@ -190,8 +191,8 @@ const ManageTransports = () => {
                   className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition"
                 >
                   <div className="flex">
-                    <div className="w-48 bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center text-white text-4xl">
-                      🚌
+                    <div className="w-48 bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center text-white">
+                      <Bus className="w-16 h-16" />
                     </div>
                     <div className="flex-1 p-6">
                       <div className="flex justify-between items-start">
@@ -199,8 +200,8 @@ const ManageTransports = () => {
                           <h3 className="text-xl font-bold text-gray-900">
                             {trans.vehicle_type}
                           </h3>
-                          <p className="text-gray-600">
-                            👥 Capacity: {trans.total_capacity} seats
+                          <p className="text-gray-600 flex items-center gap-1">
+                            <Users className="w-4 h-4" /> Capacity: {trans.total_capacity} seats
                           </p>
                         </div>
                         <span
@@ -266,8 +267,8 @@ const ManageTransports = () => {
                   <h2 className="text-2xl font-bold text-gray-900">
                     {selectedTransport.vehicle_type}
                   </h2>
-                  <p className="text-gray-600">
-                    👥 {selectedTransport.total_capacity} seats
+                  <p className="text-gray-600 flex items-center gap-1">
+                    <Users className="w-4 h-4" /> {selectedTransport.total_capacity} seats
                   </p>
                 </div>
                 <button

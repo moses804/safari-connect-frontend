@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useBooking } from "../../context/BookingContext.jsx";
 import { Link } from "react-router-dom";
+import { Loader2, Calendar, Hotel, Bus, CheckCircle, XCircle, Clock } from "lucide-react";
 
 const MyBookings = () => {
   const { bookings, fetchBookings, loading: contextLoading } = useBooking();
@@ -29,7 +30,7 @@ const MyBookings = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-6xl animate-spin mb-4">⏳</div>
+          <Loader2 className="w-16 h-16 animate-spin mb-4 mx-auto text-blue-600" />
           <p className="text-gray-600 text-lg">Loading your bookings...</p>
         </div>
       </div>
@@ -47,7 +48,7 @@ const MyBookings = () => {
 
         {bookings.length === 0 ? (
           <div className="bg-white rounded-lg p-16 text-center">
-            <div className="text-6xl mb-6">📅</div>
+            <Calendar className="w-24 h-24 mb-6 mx-auto text-gray-400" />
             <h2 className="text-3xl font-bold text-gray-900 mb-4">No bookings yet</h2>
             <p className="text-gray-600 text-lg mb-8">
               Start booking accommodations and transports for your next safari adventure
@@ -73,21 +74,36 @@ const MyBookings = () => {
             {accommodationBookings.length > 0 && (
               <section className="mb-16">
                 <h2 className="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-                  <span className="text-4xl">🏨</span> Accommodation Bookings
+                  <Hotel className="w-10 h-10 text-blue-600" /> Accommodation Bookings
                 </h2>
                 <div className="grid md:grid-cols-2 gap-8">
                   {accommodationBookings.map((booking) => (
                     <div key={booking.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition">
-                      <div className="h-40 bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center text-white text-5xl">
-                        🏨
+                      <div className="h-40 bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center text-white">
+                        <Hotel className="w-20 h-20" />
                       </div>
                       <div className="p-6">
                         <div className="mb-4">
                           <p className="text-sm text-gray-500 mb-1">Booking ID: #{booking.id}</p>
-                          <p className="text-sm text-gray-500 mb-4">
-                            {booking.status === 'pending' && '⏳ Pending'}
-                            {booking.status === 'confirmed' && '✓ Confirmed'}
-                            {booking.status === 'cancelled' && '✗ Cancelled'}
+                          <p className="text-sm flex items-center gap-2 mb-4">
+                            {booking.status === 'pending' && (
+                              <>
+                                <Clock className="w-4 h-4 text-yellow-600" />
+                                <span className="text-yellow-600">Pending</span>
+                              </>
+                            )}
+                            {booking.status === 'confirmed' && (
+                              <>
+                                <CheckCircle className="w-4 h-4 text-green-600" />
+                                <span className="text-green-600">Confirmed</span>
+                              </>
+                            )}
+                            {booking.status === 'cancelled' && (
+                              <>
+                                <XCircle className="w-4 h-4 text-red-600" />
+                                <span className="text-red-600">Cancelled</span>
+                              </>
+                            )}
                           </p>
                         </div>
                         <div className="space-y-3 mb-6">
@@ -118,21 +134,36 @@ const MyBookings = () => {
             {transportBookings.length > 0 && (
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-                  <span className="text-4xl">🚌</span> Transport Bookings
+                  <Bus className="w-10 h-10 text-green-600" /> Transport Bookings
                 </h2>
                 <div className="grid md:grid-cols-2 gap-8">
                   {transportBookings.map((booking) => (
                     <div key={booking.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition">
-                      <div className="h-40 bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center text-white text-5xl">
-                        🚌
+                      <div className="h-40 bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center text-white">
+                        <Bus className="w-20 h-20" />
                       </div>
                       <div className="p-6">
                         <div className="mb-4">
                           <p className="text-sm text-gray-500 mb-1">Booking ID: #{booking.id}</p>
-                          <p className="text-sm text-gray-500 mb-4">
-                            {booking.status === 'pending' && '⏳ Pending'}
-                            {booking.status === 'confirmed' && '✓ Confirmed'}
-                            {booking.status === 'cancelled' && '✗ Cancelled'}
+                          <p className="text-sm flex items-center gap-2 mb-4">
+                            {booking.status === 'pending' && (
+                              <>
+                                <Clock className="w-4 h-4 text-yellow-600" />
+                                <span className="text-yellow-600">Pending</span>
+                              </>
+                            )}
+                            {booking.status === 'confirmed' && (
+                              <>
+                                <CheckCircle className="w-4 h-4 text-green-600" />
+                                <span className="text-green-600">Confirmed</span>
+                              </>
+                            )}
+                            {booking.status === 'cancelled' && (
+                              <>
+                                <XCircle className="w-4 h-4 text-red-600" />
+                                <span className="text-red-600">Cancelled</span>
+                              </>
+                            )}
                           </p>
                         </div>
                         <div className="space-y-3 mb-6">

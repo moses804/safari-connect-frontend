@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { accommodationAPI } from "../../api/accommodation.api";
 import { transportAPI } from "../../api/transport.api";
 import { useAuthHook } from "../../hooks/useAuth";
+import { Hotel, Bus, DollarSign, Star, Loader2, Palmtree, MapPin, Users } from "lucide-react";
 
 const Home = () => {
   const [featuredAccommodations, setFeaturedAccommodations] = useState([]);
@@ -41,22 +42,22 @@ const Home = () => {
 
   const features = [
     {
-      icon: "🏨",
+      icon: Hotel,
       title: "Premium Stays",
       description: "Curated accommodations for your safari",
     },
     {
-      icon: "🚌",
+      icon: Bus,
       title: "Safe Transport",
       description: "Reliable and comfortable transportation",
     },
     {
-      icon: "💰",
+      icon: DollarSign,
       title: "Best Prices",
       description: "Competitive rates on all bookings",
     },
     {
-      icon: "🌟",
+      icon: Star,
       title: "Great Reviews",
       description: "Trusted by thousands of travelers",
     },
@@ -65,7 +66,7 @@ const Home = () => {
   if (loading) {
     return (
       <div className="text-center py-20">
-        <div className="inline-block animate-spin text-4xl">⏳</div>
+        <Loader2 className="inline-block animate-spin w-12 h-12 text-blue-600" />
       </div>
     );
   }
@@ -101,7 +102,7 @@ const Home = () => {
           </div>
           <div className="bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg p-8 text-white flex items-center justify-center min-h-80">
             <div className="text-center">
-              <div className="text-9xl mb-4">🦁</div>
+              <Palmtree className="w-40 h-40 mb-4 mx-auto" />
               <p className="text-xl font-semibold">Experience the wild</p>
             </div>
           </div>
@@ -115,18 +116,21 @@ const Home = () => {
             Why Choose SafariConnect?
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, idx) => (
-              <div
-                key={idx}
-                className="p-6 bg-gradient-to-br from-gray-50 to-white rounded-lg border border-gray-200 hover:shadow-lg transition"
-              >
-                <div className="text-5xl mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600">{feature.description}</p>
-              </div>
-            ))}
+            {features.map((feature, idx) => {
+              const IconComponent = feature.icon;
+              return (
+                <div
+                  key={idx}
+                  className="p-6 bg-gradient-to-br from-gray-50 to-white rounded-lg border border-gray-200 hover:shadow-lg transition"
+                >
+                  <IconComponent className="w-12 h-12 mb-4 text-blue-600" />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600">{feature.description}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -143,15 +147,15 @@ const Home = () => {
                 key={accommodation.id}
                 className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition"
               >
-                <div className="h-48 bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center text-white text-4xl">
-                  🏨
+                <div className="h-48 bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center text-white">
+                  <Hotel className="w-16 h-16" />
                 </div>
                 <div className="p-6">
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">
                     {accommodation.title}
                   </h3>
-                  <p className="text-gray-600 mb-2">
-                    📍 {accommodation.location}
+                  <p className="text-gray-600 mb-2 flex items-center gap-2">
+                    <MapPin className="w-4 h-4" /> {accommodation.location}
                   </p>
                   <p className="text-gray-700 mb-4 line-clamp-2">
                     {accommodation.description}
@@ -195,15 +199,15 @@ const Home = () => {
                   key={transport.id}
                   className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition"
                 >
-                  <div className="h-48 bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center text-white text-4xl">
-                    🚌
+                  <div className="h-48 bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center text-white">
+                    <Bus className="w-16 h-16" />
                   </div>
                   <div className="p-6">
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">
                       {transport.vehicle_type}
                     </h3>
-                    <p className="text-gray-600 mb-4">
-                      👥 Capacity: {transport.total_capacity} seats
+                    <p className="text-gray-600 mb-4 flex items-center gap-2">
+                      <Users className="w-4 h-4" /> Capacity: {transport.total_capacity} seats
                     </p>
                     <div className="flex justify-between items-center">
                       <span className="text-2xl font-bold text-green-600">
