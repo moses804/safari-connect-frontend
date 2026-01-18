@@ -1,98 +1,105 @@
-import React, { useState, useEffect } from "react";
-// Path updated to go up two levels to reach src/api
-import API from "../../api/axios";
-// Path updated to go up two levels then into components/transport
-import TransportForm from "../../components/transport/TransportForm";
+import { Link } from "react-router-dom";
+import { useAuthHook } from "../../hooks/useAuth";
 
 const DriverDashboard = () => {
-  const [myTransports, setMyTransports] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Assuming the backend endpoint remains the same
-    API.get("/driver/transports")
-      .then((res) => {
-        setMyTransports(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching driver listings:", err);
-        setLoading(false);
-      });
-  }, []);
-
-  const handleDelete = async (id) => {
-    if (window.confirm("Delete this transport listing?")) {
-      try {
-        await API.delete(`/transports/${id}`);
-        setMyTransports(myTransports.filter((item) => item.id !== id));
-      } catch (err) {
-        console.error("Delete failed:", err);
-      }
-    }
-  };
-
-  if (loading)
-    return (
-      <div className="p-4 text-center">
-        <p>Loading Driver Dashboard...</p>
-      </div>
-    );
+  const { user } = useAuthHook();
 
   return (
-    <main className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Driver Management Dashboard</h1>
+    <div className="p-6">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">
+          Welcome, {user?.name}! 👋
+        </h1>
+        <p className="text-gray-600 mt-2">
+          Manage your transport services and track bookings
+        </p>
+      </div>
 
-      <section className="bg-gray-100 p-4 rounded-lg mb-6">
-        <h2 className="text-xl font-semibold mb-2">Add New Transport</h2>
-        <TransportForm />
-      </section>
-
-      <hr className="my-6" />
-
-      <section>
-        <h2 className="text-xl font-semibold mb-4">Your Registered Vehicles</h2>
-        {myTransports.length === 0 ? (
-          <p className="text-gray-500 italic">No vehicles listed yet.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full border-collapse border border-gray-300">
-              <thead className="bg-gray-200">
-                <tr>
-                  <th className="border p-2">Vehicle</th>
-                  <th className="border p-2">Type</th>
-                  <th className="border p-2">Capacity</th>
-                  <th className="border p-2">Price/KM</th>
-                  <th className="border p-2">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {myTransports.map((car) => (
-                  <tr key={car.id} className="hover:bg-gray-50">
-                    <td className="border p-2">{car.vehicle_make}</td>
-                    <td className="border p-2">{car.vehicle_type}</td>
-                    <td className="border p-2 text-center">
-                      {car.capacity} Seats
-                    </td>
-                    <td className="border p-2 text-center">
-                      ${car.price_per_km}
-                    </td>
-                    <td className="border p-2 text-center">
-                      <button
-                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
-                        onClick={() => handleDelete(car.id)}
-                      >
-                        Remove
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      {/* Quick Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-2xl">
+              🚌
+            </div>
+            <div>
+              <p className="text-gray-600 text-sm">Your Vehicles</p>
+              <p className="text-2xl font-bold text-gray-900">-</p>
+            </div>
           </div>
-        )}
-      </section>
-    </main>
+        </div>
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-2xl">
+              📅
+            </div>
+            <div>
+              <p className="text-gray-600 text-sm">Total Bookings</p>
+              <p className="text-2xl font-bold text-gray-900">-</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-2xl">
+              💰
+            </div>
+            <div>
+              <p className="text-gray-600 text-sm">Total Earnings</p>
+              <p className="text-2xl font-bold text-gray-900">-</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Link
+            to="/driver/transports"
+            className="flex items-center gap-4 p-4 border-2 border-green-600 rounded-lg hover:bg-green-50 transition"
+          >
+            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-2xl">
+              🚌
+            </div>
+            <div>
+              <p className="font-semibold text-gray-900">Manage Transports</p>
+              <p className="text-sm text-gray-600">
+                Add, edit, or update your vehicles
+              </p>
+            </div>
+          </Link>
+          <Link
+            to="/driver/transports"
+            className="flex items-center gap-4 p-4 border-2 border-blue-600 rounded-lg hover:bg-blue-50 transition"
+          >
+            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-2xl">
+              📅
+            </div>
+            <div>
+              <p className="font-semibold text-gray-900">View Bookings</p>
+              <p className="text-sm text-gray-600">
+                See who booked your transport
+              </p>
+            </div>
+          </Link>
+        </div>
+      </div>
+
+      {/* Tips Section */}
+      <div className="bg-green-50 rounded-lg p-6">
+        <h3 className="text-lg font-semibold text-green-900 mb-3">
+          💡 Tips for Drivers
+        </h3>
+        <ul className="space-y-2 text-green-800">
+          <li>• Keep your vehicle information and photos up to date</li>
+          <li>• Set competitive daily rates based on your vehicle type</li>
+          <li>• Maintain good availability to attract more bookings</li>
+          <li>• Provide excellent service to get positive reviews</li>
+        </ul>
+      </div>
+    </div>
   );
 };
 
