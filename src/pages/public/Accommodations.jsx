@@ -3,6 +3,7 @@ import { accommodationAPI } from "../../api/accommodation.api";
 import { useAuthHook } from "../../hooks/useAuth";
 import AccommodationBookingForm from "../../components/accommodation/AccommodationBookingForm";
 import { useNavigate } from "react-router-dom";
+import { Hotel, Loader2, MapPin, Users, CheckCircle, XCircle, Search } from "lucide-react";
 
 const Accommodations = () => {
   const [accommodations, setAccommodations] = useState([]);
@@ -59,7 +60,7 @@ const Accommodations = () => {
   if (loading) {
     return (
       <div className="text-center py-20">
-        <span className="text-4xl">⏳</span>
+        <Loader2 className="inline-block animate-spin w-12 h-12 text-blue-600" />
       </div>
     );
   }
@@ -104,8 +105,8 @@ const Accommodations = () => {
                 className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition"
               >
                 {/* Image Section */}
-                <div className="h-56 bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center text-white text-5xl">
-                  🏨
+                <div className="h-56 bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center text-white">
+                  <Hotel className="w-20 h-20" />
                 </div>
 
                 {/* Content Section */}
@@ -114,7 +115,7 @@ const Accommodations = () => {
                     {accommodation.title}
                   </h3>
                   <p className="text-gray-600 mb-4 flex items-center gap-2">
-                    📍 {accommodation.location}
+                    <MapPin className="w-4 h-4" /> {accommodation.location}
                   </p>
 
                   {/* Description */}
@@ -124,20 +125,20 @@ const Accommodations = () => {
 
                   {/* Amenities */}
                   <div className="mb-4 space-y-2 text-sm text-gray-600">
-                    <p>
-                      👥 Capacity:{" "}
+                    <p className="flex items-center gap-2">
+                      <Users className="w-4 h-4" /> Capacity:{" "}
                       <span className="font-semibold">
                         {accommodation.capacity} guests
                       </span>
                     </p>
                     <p className="inline-block">
                       {accommodation.available ? (
-                        <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
-                          ✓ Available
+                        <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold inline-flex items-center gap-1">
+                          <CheckCircle className="w-3 h-3" /> Available
                         </span>
                       ) : (
-                        <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold">
-                          ✗ Not Available
+                        <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold inline-flex items-center gap-1">
+                          <XCircle className="w-3 h-3" /> Not Available
                         </span>
                       )}
                     </p>
@@ -166,7 +167,7 @@ const Accommodations = () => {
           </div>
         ) : (
           <div className="bg-white rounded-lg p-12 text-center">
-            <div className="text-6xl mb-4">🔍</div>
+            <Search className="w-24 h-24 mb-4 mx-auto text-gray-400" />
             <h3 className="text-2xl font-bold text-gray-900 mb-2">
               No accommodations found
             </h3>

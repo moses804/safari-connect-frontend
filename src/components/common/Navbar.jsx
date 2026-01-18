@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthHook } from "../../hooks/useAuth";
+import { Palmtree, User, Hotel, Bus, BarChart3, ClipboardList, LogOut } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +21,7 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2">
-              <span className="text-3xl">🦁</span>
+              <Palmtree className="w-8 h-8 text-blue-600" />
               <span className="text-xl font-bold text-blue-600">
                 SafariConnect
               </span>
@@ -99,7 +100,7 @@ const Navbar = () => {
                 {/* User menu */}
                 <div className="relative group">
                   <button className="flex items-center gap-2 text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md font-medium">
-                    <span className="text-xl">👤</span>
+                    <User className="w-5 h-5" />
                     <span>{user?.name}</span>
                     <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full capitalize">
                       {user?.role}
@@ -175,14 +176,20 @@ const Navbar = () => {
               className="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md font-medium"
               onClick={() => setIsOpen(false)}
             >
-              🏨 Accommodations
+              <div className="flex items-center gap-2">
+                <Hotel className="w-5 h-5" />
+                <span>Accommodations</span>
+              </div>
             </Link>
             <Link
               to="/transports"
               className="block text-gray-600 hover:text-green-600 px-3 py-2 rounded-md font-medium"
               onClick={() => setIsOpen(false)}
             >
-              🚌 Transport
+              <div className="flex items-center gap-2">
+                <Bus className="w-5 h-5" />
+                <span>Transport</span>
+              </div>
             </Link>
 
             {isAuthenticated ? (
@@ -194,14 +201,20 @@ const Navbar = () => {
                       className="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md font-medium"
                       onClick={() => setIsOpen(false)}
                     >
-                      📊 Dashboard
+                      <div className="flex items-center gap-2">
+                        <BarChart3 className="w-5 h-5" />
+                        <span>Dashboard</span>
+                      </div>
                     </Link>
                     <Link
                       to="/tourist/bookings"
                       className="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md font-medium"
                       onClick={() => setIsOpen(false)}
                     >
-                      📋 My Bookings
+                      <div className="flex items-center gap-2">
+                        <ClipboardList className="w-5 h-5" />
+                        <span>My Bookings</span>
+                      </div>
                     </Link>
                   </>
                 )}
@@ -213,14 +226,20 @@ const Navbar = () => {
                       className="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md font-medium"
                       onClick={() => setIsOpen(false)}
                     >
-                      📊 Dashboard
+                      <div className="flex items-center gap-2">
+                        <BarChart3 className="w-5 h-5" />
+                        <span>Dashboard</span>
+                      </div>
                     </Link>
                     <Link
                       to="/host/accommodations"
                       className="block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md font-medium"
                       onClick={() => setIsOpen(false)}
                     >
-                      🏨 My Accommodations
+                      <div className="flex items-center gap-2">
+                        <Hotel className="w-5 h-5" />
+                        <span>My Accommodations</span>
+                      </div>
                     </Link>
                   </>
                 )}
@@ -232,14 +251,20 @@ const Navbar = () => {
                       className="block text-gray-600 hover:text-green-600 px-3 py-2 rounded-md font-medium"
                       onClick={() => setIsOpen(false)}
                     >
-                      📊 Dashboard
+                      <div className="flex items-center gap-2">
+                        <BarChart3 className="w-5 h-5" />
+                        <span>Dashboard</span>
+                      </div>
                     </Link>
                     <Link
                       to="/driver/transports"
                       className="block text-gray-600 hover:text-green-600 px-3 py-2 rounded-md font-medium"
                       onClick={() => setIsOpen(false)}
                     >
-                      🚌 My Transports
+                      <div className="flex items-center gap-2">
+                        <Bus className="w-5 h-5" />
+                        <span>My Transports</span>
+                      </div>
                     </Link>
                   </>
                 )}
@@ -252,7 +277,10 @@ const Navbar = () => {
                     onClick={handleLogout}
                     className="w-full text-left px-3 py-2 text-red-600 hover:bg-red-50 rounded-md font-medium"
                   >
-                    🚪 Logout
+                    <div className="flex items-center gap-2">
+                      <LogOut className="w-5 h-5" />
+                      <span>Logout</span>
+                    </div>
                   </button>
                 </div>
               </>

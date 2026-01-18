@@ -3,6 +3,7 @@ import { transportAPI } from "../../api/transport.api";
 import { useAuthHook } from "../../hooks/useAuth";
 import TransportBookingForm from "../../components/transport/TransportBookingForm";
 import { useNavigate } from "react-router-dom";
+import { Loader2, Bus, Users, CheckCircle, XCircle, Search } from "lucide-react";
 
 const Transports = () => {
   const [transports, setTransports] = useState([]);
@@ -55,7 +56,7 @@ const Transports = () => {
   if (loading) {
     return (
       <div className="text-center py-20">
-        <span className="text-4xl">⏳</span>
+        <Loader2 className="w-12 h-12 animate-spin mx-auto text-green-600" />
       </div>
     );
   }
@@ -100,8 +101,8 @@ const Transports = () => {
                 className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition"
               >
                 {/* Image Section */}
-                <div className="h-56 bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center text-white text-5xl">
-                  🚌
+                <div className="h-56 bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center text-white">
+                  <Bus className="w-20 h-20" />
                 </div>
 
                 {/* Content Section */}
@@ -112,20 +113,20 @@ const Transports = () => {
 
                   {/* Amenities */}
                   <div className="mb-4 space-y-2 text-sm text-gray-600">
-                    <p>
-                      👥 Capacity:{" "}
+                    <p className="flex items-center gap-2">
+                      <Users className="w-4 h-4" /> Capacity:{" "}
                       <span className="font-semibold">
                         {transport.total_capacity} seats
                       </span>
                     </p>
                     <p className="inline-block">
                       {transport.available ? (
-                        <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
-                          ✓ Available
+                        <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold inline-flex items-center gap-1">
+                          <CheckCircle className="w-3 h-3" /> Available
                         </span>
                       ) : (
-                        <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold">
-                          ✗ Not Available
+                        <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold inline-flex items-center gap-1">
+                          <XCircle className="w-3 h-3" /> Not Available
                         </span>
                       )}
                     </p>
@@ -154,7 +155,7 @@ const Transports = () => {
           </div>
         ) : (
           <div className="bg-white rounded-lg p-12 text-center">
-            <div className="text-6xl mb-4">🔍</div>
+            <Search className="w-16 h-16 mx-auto mb-4 text-gray-400" />
             <h3 className="text-2xl font-bold text-gray-900 mb-2">
               No transports found
             </h3>
@@ -173,8 +174,8 @@ const Transports = () => {
                   <h2 className="text-3xl font-bold text-gray-900">
                     {selectedTransport.vehicle_type}
                   </h2>
-                  <p className="text-gray-600 mt-1">
-                    🚌 {selectedTransport.total_capacity} seats available
+                  <p className="text-gray-600 mt-1 flex items-center gap-2">
+                    <Bus className="w-5 h-5" /> {selectedTransport.total_capacity} seats available
                   </p>
                 </div>
                 <button
@@ -202,12 +203,12 @@ const Transports = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   {selectedTransport.available ? (
-                    <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
-                      ✓ Available
+                    <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold flex items-center gap-1">
+                      <CheckCircle className="w-4 h-4" /> Available
                     </span>
                   ) : (
-                    <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-semibold">
-                      ✗ Not Available
+                    <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-semibold flex items-center gap-1">
+                      <XCircle className="w-4 h-4" /> Not Available
                     </span>
                   )}
                 </div>

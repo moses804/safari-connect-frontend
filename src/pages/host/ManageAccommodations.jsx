@@ -3,6 +3,7 @@ import { useAuthHook } from "../../hooks/useAuth";
 import { accommodationAPI } from "../../api/accommodation.api";
 import { bookingAPI } from "../../api/booking.api";
 import AccommodationForm from "../../components/accommodation/AccommodationForm";
+import { Loader2, Hotel, MapPin } from "lucide-react";
 
 const ManageAccommodations = () => {
   const { user } = useAuthHook();
@@ -57,7 +58,7 @@ const ManageAccommodations = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-4xl animate-spin">⏳</div>
+        <Loader2 className="w-12 h-12 animate-spin text-blue-600" />
       </div>
     );
   }
@@ -172,7 +173,7 @@ const ManageAccommodations = () => {
         <>
           {accommodations.length === 0 ? (
             <div className="bg-white rounded-lg shadow-lg p-12 text-center">
-              <div className="text-6xl mb-4">🏨</div>
+              <Hotel className="w-16 h-16 mx-auto mb-4 text-gray-400" />
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 No Accommodations Yet
               </h2>
@@ -193,14 +194,16 @@ const ManageAccommodations = () => {
                   key={acc.id}
                   className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition"
                 >
-                  <div className="h-48 bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center text-white text-5xl">
-                    🏨
+                  <div className="h-48 bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center text-white">
+                    <Hotel className="w-20 h-20" />
                   </div>
                   <div className="p-6">
                     <h3 className="text-xl font-bold text-gray-900 mb-2">
                       {acc.title}
                     </h3>
-                    <p className="text-gray-600 mb-2">📍 {acc.location}</p>
+                    <p className="text-gray-600 mb-2 flex items-center gap-1">
+                      <MapPin className="w-4 h-4" /> {acc.location}
+                    </p>
                     <p className="text-gray-700 mb-4 line-clamp-2">
                       {acc.description}
                     </p>
@@ -263,8 +266,8 @@ const ManageAccommodations = () => {
                   <h2 className="text-2xl font-bold text-gray-900">
                     {selectedAccommodation.title}
                   </h2>
-                  <p className="text-gray-600">
-                    📍 {selectedAccommodation.location}
+                  <p className="text-gray-600 flex items-center gap-1">
+                    <MapPin className="w-4 h-4" /> {selectedAccommodation.location}
                   </p>
                 </div>
                 <button
