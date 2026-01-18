@@ -28,6 +28,7 @@ const Login = () => {
       await login(values)
       navigate(from, { replace: true })
     } catch (error) {
+      console.error('Login error:', error)
       setServerError(error.message || 'Login failed. Please try again.')
     } finally {
       setSubmitting(false)

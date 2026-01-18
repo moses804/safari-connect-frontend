@@ -42,8 +42,8 @@ export const AuthProvider = ({ children }) => {
     setError(null)
     try {
       const data = await authAPI.register(userData)
-      if (data.token) {
-        localStorage.setItem('token', data.token)
+      if (data.access_token) {
+        localStorage.setItem('token', data.access_token)
         localStorage.setItem('user', JSON.stringify(data.user))
         setUser(data.user)
       }
@@ -59,13 +59,17 @@ export const AuthProvider = ({ children }) => {
     setError(null)
     try {
       const data = await authAPI.login(credentials)
-      if (data.token) {
-        localStorage.setItem('token', data.token)
+      console.log('Login response:', data)
+      if (data.access_token) {
+        localStorage.setItem('token', data.access_token)
         localStorage.setItem('user', JSON.stringify(data.user))
         setUser(data.user)
+      } else {
+        throw new Error('No access token received from server')
       }
       return data
     } catch (err) {
+      console.error('Login error in context:', err)
       setError(err.message || 'Login failed')
       throw err
     }

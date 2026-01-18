@@ -1,123 +1,133 @@
 import React, { useState } from "react";
-// Updated path: go up two levels to reach src/api/axios
-import API from "../../api/axios";
+import { transportAPI } from "../../api/transport.api";
 
-const TransportForm = () => {
+const TransportForm = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
-    vehicle_make: "",
-    vehicle_type: "", // e.g., SUV, Van, Motorcycle
-    capacity: "",
-    price_per_km: "",
-    image_url: "",
+    vehicle_type: "",
+    price_per_day: "",
+    total_capacity: "",
+    available: true,
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
+
     try {
-      // Ensure the endpoint matches your backend route
-      const response = await API.post("/transports", formData);
-      console.log("Success:", response.data);
-      alert("Transport service added successfully!");
-
-      // Reset form
-      setFormData({
-        vehicle_make: "",
-        vehicle_type: "",
-        capacity: "",
-        price_per_km: "",
-        image_url: "",
+      await transportAPI.create({
+        ...formData,
+        price_per_day: parseFloat(formData.price_per_day),
+        total_capacity: parseInt(formData.total_capacity),
       });
-
-      // Optional: If you want the dashboard to refresh automatically,
-      // you could add a window.location.reload() or pass a refresh function as a prop
+      alert("Transport service added successfully!");
+      setFormData({
+        vehicle_type: "",
+        price_per_day: "",
+        total_capacity: "",
+        available: true,
+      });
+      if (onSuccess) onSuccess();
     } catch (error) {
       console.error("Error adding transport:", error);
-      alert("Failed to add transport. Please try again.");
+      setError(
+        error.response?.data?.message || "Failed to create transport service",
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <section className="form-container">
-      <h2 className="text-lg font-bold mb-4">
-        Register a New Transport Service
-      </h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex flex-col">
-          <label className="font-medium">Vehicle Make/Model:</label>
-          <input
-            className="border p-2 rounded"
-            type="text"
-            name="vehicle_make"
-            value={formData.vehicle_make}
-            onChange={handleChange}
-            required
-          />
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {error && (
+        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+          {error}
         </div>
+      )}
 
-        <div className="flex flex-col">
-          <label className="font-medium">Vehicle Type:</label>
-          <input
-            className="border p-2 rounded"
-            type="text"
-            name="vehicle_type"
-            value={formData.vehicle_type}
-            onChange={handleChange}
-            placeholder="e.g. 4x4, Mini-bus"
-            required
-          />
-        </div>
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-1">
+          Vehicle Type *
+        </label>
+        <input
+          type="text"
+          name="vehicle_type"
+          placeholder="e.g., 4x4 Safari Jeep, Mini-bus, SUV"
+          onChange={handleChange}
+          value={formData.vehicle_type}
+          required
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+        />
+      </div>
 
-        <div className="flex flex-col">
-          <label className="font-medium">Passenger Capacity:</label>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            Price per Day ($) *
+          </label>
           <input
-            className="border p-2 rounded"
             type="number"
-            name="capacity"
-            value={formData.capacity}
+            name="price_per_day"
+            placeholder="150"
+            min="0"
+            step="0.01"
             onChange={handleChange}
+            value={formData.price_per_day}
             required
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
           />
         </div>
 
-        <div className="flex flex-col">
-          <label className="font-medium">Price per KM:</label>
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            Passenger Capacity *
+          </label>
           <input
-            className="border p-2 rounded"
             type="number"
-            name="price_per_km"
-            value={formData.price_per_km}
+            name="total_capacity"
+            placeholder="7"
+            min="1"
             onChange={handleChange}
+            value={formData.total_capacity}
             required
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
           />
         </div>
+      </div>
 
-        <div className="flex flex-col">
-          <label className="font-medium">Vehicle Image URL:</label>
-          <input
-            className="border p-2 rounded"
-            type="text"
-            name="image_url"
-            value={formData.image_url}
-            onChange={handleChange}
-          />
-        </div>
+      <div className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          name="available"
+          id="available"
+          checked={formData.available}
+          onChange={handleChange}
+          className="w-4 h-4 text-green-600 rounded focus:ring-green-500"
+        />
+        <label htmlFor="available" className="text-sm text-gray-700">
+          Available for booking immediately
+        </label>
+      </div>
 
-        <button
-          type="submit"
-          className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition"
-        >
-          List Vehicle
-        </button>
-      </form>
-    </section>
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {loading ? "Creating..." : "List Vehicle"}
+      </button>
+    </form>
   );
 };
 
