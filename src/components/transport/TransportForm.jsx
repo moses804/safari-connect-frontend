@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import { transportAPI } from "../../api/transport.api";
 
 const TransportForm = ({ onSuccess }) => {
@@ -30,7 +31,7 @@ const TransportForm = ({ onSuccess }) => {
         price_per_day: parseFloat(formData.price_per_day),
         total_capacity: parseInt(formData.total_capacity),
       });
-      alert("Transport service added successfully!");
+      toast.success("Transport service added successfully!");
       setFormData({
         vehicle_type: "",
         price_per_day: "",

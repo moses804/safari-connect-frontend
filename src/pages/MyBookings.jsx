@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { bookingAPI } from '../../api/booking.api';
 import BookingCard from '../../components/booking/BookingCard';
 
@@ -31,10 +32,10 @@ const MyBookings = () => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
       try {
         await bookingAPI.cancel(bookingId);
-        alert('Booking cancelled successfully');
+        toast.success('Booking cancelled successfully');
         fetchBookings(); // Refresh the list
       } catch (error) {
-        alert('Failed to cancel booking');
+        toast.error('Failed to cancel booking');
       }
     }
   };

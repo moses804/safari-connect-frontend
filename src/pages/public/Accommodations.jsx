@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import { accommodationAPI } from "../../api/accommodation.api";
 import { useAuthHook } from "../../hooks/useAuth";
 import AccommodationBookingForm from "../../components/accommodation/AccommodationBookingForm";
@@ -40,7 +41,7 @@ const Accommodations = () => {
       return;
     }
     if (user?.role !== "tourist") {
-      alert(
+      toast.warn(
         "Only travelers can book accommodations. Please sign up as a traveler.",
       );
       return;
@@ -54,7 +55,7 @@ const Accommodations = () => {
 
   const handleBookingSuccess = () => {
     handleCloseModal();
-    alert("Booking successful! You can view your bookings in the dashboard.");
+    toast.success("Booking successful! You can view your bookings in the dashboard.");
   };
 
   if (loading) {

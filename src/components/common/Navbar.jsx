@@ -5,13 +5,25 @@ import { Palmtree, User, Hotel, Bus, BarChart3, ClipboardList, LogOut } from "lu
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { user, isAuthenticated, logout, isTourist, isHost, isDriver } =
     useAuthHook();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
+    setIsUserMenuOpen(false);
     navigate("/");
+  };
+
+  // Handle mouse enter/leave with a small delay to prevent flickering
+  let closeTimeout;
+  const handleMouseEnter = () => {
+    clearTimeout(closeTimeout);
+    setIsUserMenuOpen(true);
+  };
+  const handleMouseLeave = () => {
+    closeTimeout = setTimeout(() => setIsUserMenuOpen(false), 150);
   };
 
   return (
@@ -98,7 +110,11 @@ const Navbar = () => {
                 )}
 
                 {/* User menu */}
-                <div className="relative group">
+                <div
+                  className="relative"
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                >
                   <button className="flex items-center gap-2 text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md font-medium">
                     <User className="w-5 h-5" />
                     <span>{user?.name}</span>
@@ -106,14 +122,16 @@ const Navbar = () => {
                       {user?.role}
                     </span>
                   </button>
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-50 border border-gray-200">
-                    <button
-                      onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 text-gray-600 hover:bg-gray-100"
-                    >
-                      Logout
-                    </button>
-                  </div>
+                  {isUserMenuOpen && (
+                    <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                      <button
+                        onClick={handleLogout}
+                        className="block w-full text-left px-4 py-2 text-gray-600 hover:bg-gray-100"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
                 </div>
               </>
             ) : (
