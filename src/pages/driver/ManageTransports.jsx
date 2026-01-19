@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import { useAuthHook } from "../../hooks/useAuth";
 import { transportAPI } from "../../api/transport.api";
 import { bookingAPI } from "../../api/booking.api";
 import TransportForm from "../../components/transport/TransportForm";
-import { Loader2, Bus, Users } from "lucide-react";
+import { Loader2, Bus, Users, Trash2 } from "lucide-react";
 
 const ManageTransports = () => {
   const { user } = useAuthHook();
@@ -40,6 +41,19 @@ const ManageTransports = () => {
   const handleTransportCreated = () => {
     setShowForm(false);
     fetchData();
+  };
+
+  const handleDeleteTransport = async (id, vehicleType) => {
+    if (window.confirm(`Are you sure you want to delete "${vehicleType}"? This will also delete all associated bookings.`)) {
+      try {
+        await transportAPI.delete(id);
+        toast.success("Transport deleted successfully");
+        fetchData();
+      } catch (error) {
+        console.error("Error deleting transport:", error);
+        toast.error("Failed to delete transport");
+      }
+    }
   };
 
   const handleViewBookings = (transport) => {
@@ -245,6 +259,13 @@ const ManageTransports = () => {
                             {trans.available
                               ? "Mark Unavailable"
                               : "Mark Available"}
+                          </button>
+                          <button
+                            onClick={() => handleDeleteTransport(trans.id, trans.vehicle_type)}
+                            className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                            title="Delete transport"
+                          >
+                            <Trash2 className="w-5 h-5" />
                           </button>
                         </div>
                       </div>

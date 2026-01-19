@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import { useAuthHook } from "../../hooks/useAuth";
 import { accommodationAPI } from "../../api/accommodation.api";
 import { bookingAPI } from "../../api/booking.api";
 import AccommodationForm from "../../components/accommodation/AccommodationForm";
-import { Loader2, Hotel, MapPin } from "lucide-react";
+import { Loader2, Hotel, MapPin, Trash2 } from "lucide-react";
 
 const ManageAccommodations = () => {
   const { user } = useAuthHook();
@@ -40,6 +41,19 @@ const ManageAccommodations = () => {
   const handleAccommodationCreated = () => {
     setShowForm(false);
     fetchData();
+  };
+
+  const handleDeleteAccommodation = async (id, title) => {
+    if (window.confirm(`Are you sure you want to delete "${title}"? This will also delete all associated bookings.`)) {
+      try {
+        await accommodationAPI.delete(id);
+        toast.success("Accommodation deleted successfully");
+        fetchData();
+      } catch (error) {
+        console.error("Error deleting accommodation:", error);
+        toast.error("Failed to delete accommodation");
+      }
+    }
   };
 
   const handleViewBookings = (accommodation) => {
@@ -246,6 +260,13 @@ const ManageAccommodations = () => {
                         className="flex-1 py-2 border-2 border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition"
                       >
                         {acc.available ? "Mark Unavailable" : "Mark Available"}
+                      </button>
+                      <button
+                        onClick={() => handleDeleteAccommodation(acc.id, acc.title)}
+                        className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                        title="Delete accommodation"
+                      >
+                        <Trash2 className="w-5 h-5" />
                       </button>
                     </div>
                   </div>
