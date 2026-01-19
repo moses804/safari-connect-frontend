@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import { accommodationAPI } from "../../api/accommodation.api";
 
 const AccommodationForm = ({ onSuccess }) => {
@@ -32,7 +33,7 @@ const AccommodationForm = ({ onSuccess }) => {
         price_per_night: parseFloat(formData.price_per_night),
         capacity: parseInt(formData.capacity),
       });
-      alert("Property listed successfully!");
+      toast.success("Property listed successfully!");
       setFormData({
         title: "",
         description: "",

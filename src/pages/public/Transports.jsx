@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import { transportAPI } from "../../api/transport.api";
 import { useAuthHook } from "../../hooks/useAuth";
 import TransportBookingForm from "../../components/transport/TransportBookingForm";
@@ -38,7 +39,7 @@ const Transports = () => {
       return;
     }
     if (user?.role !== "tourist") {
-      alert("Only travelers can book transport. Please sign up as a traveler.");
+      toast.warn("Only travelers can book transport. Please sign up as a traveler.");
       return;
     }
     setSelectedTransport(transport);
@@ -50,7 +51,7 @@ const Transports = () => {
 
   const handleBookingSuccess = () => {
     handleCloseModal();
-    alert("Booking successful! You can view your bookings in the dashboard.");
+    toast.success("Booking successful! You can view your bookings in the dashboard.");
   };
 
   if (loading) {
