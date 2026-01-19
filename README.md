@@ -131,6 +131,7 @@ cd safari-connect-frontend
 
 ```bash
 npm install
+npm install lucide-react
 ```
 
 3. Create a `.env` file (optional):
